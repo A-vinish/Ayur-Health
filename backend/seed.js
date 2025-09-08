@@ -4,7 +4,7 @@ dotenv.config()
 import Doctor from './models/Doctor.js'
 import Patient from './models/Patient.js'
 import Recipe from './models/Recipe.js'
-import Pharmacy from './models/Pharmacy.js'
+import Pharmacy from './models/pharmacy.js'
 import Hospital from './models/Hospital.js'
 import { sumNutrition, aggregateAyurveda } from './lib/nutrition.js'
 
