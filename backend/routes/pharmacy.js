@@ -1,5 +1,5 @@
 import express from 'express'
-import Pharmacy from '../models/Pharmacy.js'
+import Pharmacy from '../models pharmacy.js'
 const router = express.Router()
 
 function jaccard(a, b){
