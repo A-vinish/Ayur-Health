@@ -8,13 +8,13 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 // routes
-import patientsRouter from './routes/patients.js'
-import doctorsRouter from './routes/doctors.js'
-import recipesRouter from './routes/recipes.js'
-import dietRouter from './routes/diet.js'
-import pharmacyRouter from './routes/pharmacy.js'
-import consultRouter from './routes/consultations.js'
-import hospitalRouter from './routes/hospitals.js'
+import patientsRouter from './models/patients.js'
+import doctorsRouter from './models/doctors.js'
+import recipesRouter from './models/recipes.js'
+import dietRouter from './models/diet.js'
+import pharmacyRouter from './models/pharmacy.js'
+import consultRouter from './models/consultations.js'
+import hospitalRouter from './models/hospitals.js'
 
 dotenv.config()
 
