@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayur-Nourish: Ayurvedic Practice Management</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f8f5f0 0%, #e8f4e8 100%);
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2c7744 0%, #5a3d2b 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+        }
+        
+        .sidebar {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .nav-item {
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-item.active, .nav-item:hover {
+            background: #e8f5e9;
+            color: #2c7744;
+            font-weight: 500;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .module {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            display: none;
+        }
+        
+        .module.active {
+            display: block;
+        }
+        
+        .module-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e8f5e9;
+        }
+        
+        h2 {
+            color: #2c7744;
+            font-size: 1.8rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .stat-card {
+            background: #f1f8e9;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #388e3c;
+            font-size: 0.9rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid #4caf50;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        h3 {
+            color: #5a3d2b;
+            font-size: 1.3rem;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #2c7744;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #e8f5e9;
+            color: #2c7744;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #5a3d2b;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .patient-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .patient-card {
+            background: #f8f5f0;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .patient-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .patient-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2c7744;
+            margin-bottom: 10px;
+        }
+        
+        .patient-detail {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .detail-label {
+            color: #5a3d2b;
+            font-weight: 500;
+        }
+        
+        .detail-value {
+            color: #2c7744;
+        }
+        
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .food-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border: 1px solid #e8f5e9;
+        }
+        
+        .food-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: #4caf50;
+        }
+        
+        .food-name {
+            font-weight: 600;
+            color: #2c7744;
+            margin-bottom: 8px;
+        }
+        
+        .food-property {
+            font-size: 0.8rem;
+            color: #5a3d2b;
+            margin-bottom: 3px;
+        }
+        
+        .consultation-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .message-container {
+            height: 300px;
+            overflow-y: auto;
+            background: #f8f5f0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .message {
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            max-width: 80%;
+        }
+        
+        .message-patient {
+            background: #e8f5e9;
+            margin-right: auto;
+        }
+        
+        .message-doctor {
+            background: #bbdefb;
+            margin-left: auto;
+        }
+        
+        .quiz-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        .quiz-question {
+            margin-bottom: 20px;
+        }
+        
+        .option-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .option {
+            padding: 12px;
+            background: #f8f5f0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .option:hover {
+            background: #e8f5e9;
+        }
+        
+        .option.selected {
+            background: #4caf50;
+            color: white;
+        }
+        
+        @media (max-width: 1024px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: flex;
+                overflow-x: auto;
+                gap: 10px;
+            }
+            
+            .nav-item {
+                flex-shrink: 0;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .consultation-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .patient-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .food-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .option-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>NutriVeda</h1>
+            <!-- <p class="subtitle">Comprehensive Ayurvedic Practice Management System</p> -->
+        </header>
+        
+        <div class="dashboard">
+            <div class="sidebar">
+                <div class="nav-item active" data-target="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</div>
+                <div class="nav-item" data-target="patient-management"><i class="fas fa-user-injured"></i> Patient Management</div>
+                <div class="nav-item" data-target="patient-profile"><i class="fas fa-id-card"></i> Patient Profile</div>
+                <div class="nav-item" data-target="patient-list"><i class="fas fa-list"></i> Patient List</div>
+                <div class="nav-item" data-target="diet-chart"><i class="fas fa-utensils"></i> Diet Chart Generator</div>
+                <div class="nav-item" data-target="pharmacy"><i class="fas fa-mortar-pestle"></i> Pharmacy Directory</div>
+                <div class="nav-item" data-target="recipe-builder"><i class="fas fa-utensil-spoon"></i> Recipe Builder</div>
+                <div class="nav-item" data-target="consultation"><i class="fas fa-comments"></i> Consultation</div>
+                <div class="nav-item" data-target="health-quiz"><i class="fas fa-clipboard-list"></i> Health Assessment</div>
+                <div class="nav-item" data-target="reporting"><i class="fas fa-chart-bar"></i> Reporting</div>
+                <div class="nav-item" data-target="admin"><i class="fas fa-cog"></i> Admin Panel</div>
+            </div>
+            
+            <div class="main-content">
+                <!-- Dashboard Module -->
+                <div class="module active" id="dashboard">
+                    <div class="module-header">
+                        <h2>Dashboard</h2>
+                        <span>Welcome, Dr. Avinish</span>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number">142</div>
+                            <div class="stat-label">Total Patients</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">24</div>
+                            <div class="stat-label">Appointments Today</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">78%</div>
+                            <div class="stat-label">Patient Satisfaction</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Recent Activity</h3>
+                            <button class="btn btn-secondary">View All</button>
+                        </div>
+                        <p>• Priya Singh completed her health assessment</p>
+                        <p>• New diet chart generated for Rajesh Kumar</p>
+                        <p>• Appointment scheduled with Amit Patel for tomorrow</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Upcoming Appointments</h3>
+                            <button class="btn btn-secondary">Schedule New</button>
+                        </div>
+                        <p>10:00 AM - Shakshi(Follow-up)</p>
+                        <p>11:30 AM - Riya (New Patient)</p>
+                        <p>2:00 PM - Soumya (Diet Review)</p>
+                        <p>10:00 AM - Harshit</p>
+                    </div>
+                </div>
+                
+                <!-- Patient Management Module -->
+                <div class="module" id="patient-management">
+                    <div class="module-header">
+                        <h2>Patient Management</h2>
+                        <button class="btn btn-primary">Add New Patient</button>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Register New Patient</h3>
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" placeholder="Enter patient's full name">
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" placeholder="Enter patient's email">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" placeholder="Enter patient's phone number">
+                        </div>
+                        <div class="form-group">
+                            <label>Date of Birth</label>
+                            <input type="date">
+                        </div>
+                        <button class="btn btn-primary">Save Patient</button>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Patient Search</h3>
+                        <div class="form-group">
+                            <input type="text" placeholder="Search by name, email, or phone">
+                        </div>
+                        <button class="btn btn-secondary">Search</button>
+                    </div>
+                </div>
+                
+                <!-- Patient Profile Module -->
+                <div class="module" id="patient-profile">
+                    <div class="module-header">
+                        <h2>Patient Profile</h2>
+                        <button class="btn btn-primary">Edit Profile</button>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Personal Information</h3>
+                        <div class="patient-detail">
+                            <span class="detail-label">Name:</span>
+                            <span class="detail-value">Priya Singh</span>
+                        </div>
+                        <div class="patient-detail">
+                            <span class="detail-label">Age:</span>
+                            <span class="detail-value">42 years</span>
+                        </div>
+                        <div class="patient-detail">
+                            <span class="detail-label">Gender:</span>
+                            <span class="detail-value">Female</span>
+                        </div>
+                        <div class="patient-detail">
+                            <span class="detail-label">Phone:</span>
+                            <span class="detail-value">+91 98765 43210</span>
+                        </div>
+                        <div class="patient-detail">
+                            <span class="detail-label">Email:</span>
+                            <span class="detail-value">priya.singh@example.com</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Health Information</h3>
+                        <div class="patient-detail">
+                            <span class="detail-label">Prakriti (Constitution):</span>
+                            <span class="detail-value">Vata-Pitta</span>
+                        </div>
+                        <div class="patient-detail">
+                            <span class="detail-label">Vikriti (Imbalance):</span>
+                            <span class="detail-value">Pitta</span>
+                        </div>
+                        <div class="patient-detail">
+                            <span class="detail-label">Medical Conditions:</span>
+                            <span class="detail-value">Hypertension, Digestive issues</span>
+                        </div>
+                        <div class="patient-detail">
+                            <span class="detail-label">Dietary Restrictions:</span>
+                            <span class="detail-value">Lactose intolerant, No spicy food</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Treatment Plan</h3>
+                        <div class="patient-detail">
+                            <span class="detail-label">Current Diet:</span>
+                            <span class="detail-value">Pitta-pacifying diet</span>
+                        </div>
+                        <div class="patient-detail">
+                            <span class="detail-label">Herbal Supplements:</span>
+                            <span class="detail-value">Ashwagandha, Triphala</span>
+                        </div>
+                        <div class="patient-detail">
+                            <span class="detail-label">Yoga Practices:</span>
+                            <span class="detail-value">Pranayama, Gentle asanas</span>
+                        </div>
+                        <div class="patient-detail">
+                            <span class="detail-label">Next Review:</span>
+                            <span class="detail-value">15 August 2023</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Patient List Module -->
+                <div class="module" id="patient-list">
+                    <div class="module-header">
+                        <h2>Patient List</h2>
+                        <div>
+                            <input type="text" placeholder="Search patients..." style="width: 200px; padding: 8px;">
+                            <button class="btn btn-secondary">Filter</button>
+                        </div>
+                    </div>
+                    
+                    <div class="patient-list">
+                        <div class="patient-card">
+                            <div class="patient-name">Avinish</div>
+                            <div class="patient-detail">
+                                <span class="detail-label">Age:</span>
+                                <span class="detail-value">35 years</span>
+                            </div>
+                            <div class="patient-detail">
+                                <span class="detail-label">Condition:</span>
+                                <span class="detail-value">Diabetes</span>
+                            </div>
+                            <div class="patient-detail">
+                                <span class="detail-label">Last Visit:</span>
+                                <span class="detail-value">12 Jun 2023</span>
+                            </div>
+                            <div class="patient-detail">
+                                <span class="detail-label">Next Appointment:</span>
+                                <span class="detail-value">20 Jul 2023</span>
+                            </div>
+                            <button class="btn btn-primary" style="width: 100%; margin-top: 10px;">View Profile</button>
+                        </div>
+                        
+                        <div class="patient-card">
+                            <div class="patient-name">Riya</div>
+                            <div class="patient-detail">
+                                <span class="detail-label">Age:</span>
+                                <span class="detail-value">28 years</span>
+                            </div>
+                            <div class="patient-detail">
+                                <span class="detail-label">Condition:</span>
+                                <span class="detail-value">PCOS</span>
+                            </div>
+                            <div class="patient-detail">
+                                <span class="detail-label">Last Visit:</span>
+                                <span class="detail-value">5 Jul 2023</span>
+                            </div>
+                            <div class="patient-detail">
+                                <span class="detail-label">Next Appointment:</span>
+                                <span class="detail-value">15 Aug 2023</span>
+                            </div>
+                            <button class="btn btn-primary" style="width: 100%; margin-top: 10px;">View Profile</button>
+                        </div>
+                        
+                        <div class="patient-card">
+                            <div class="patient-name">Harshit</div>
+                            <div class="patient-detail">
+                                <span class="detail-label">Age:</span>
+                                <span class="detail-value">50 years</span>
+                            </div>
+                            <div class="patient-detail">
+                                <span class="detail-label">Condition:</span>
+                                <span class="detail-value">Hypertension</span>
+                            </div>
+                            <div class="patient-detail">
+                                <span class="detail-label">Last Visit:</span>
+                                <span class="detail-value">20 Jun 2023</span>
+                            </div>
+                            <div class="patient-detail">
+                                <span class="detail-label">Next Appointment:</span>
+                                <span class="detail-value">25 Jul 2023</span>
+                            </div>
+                            <button class="btn btn-primary" style="width: 100%; margin-top: 10px;">View Profile</button>
+                        </div>
+                        
+                        <div class="patient-card">
+                            <div class="patient-name">Nishtha</div>
+                            <div class="patient-detail">
+                                <span class="detail-label">Age:</span>
+                                <span class="detail-value">45 years</span>
+                            </div>
+                            <div class="patient-detail">
+                                <span class="detail-label">Condition:</span>
+                                <span class="detail-value">Obesity</span>
+                            </div>
+                            <div class="patient-detail">
+                                <span class="detail-label">Last Visit:</span>
+                                <span class="detail-value">10 Jul 2023</span>
+                            </div>
+                            <div class="patient-detail">
+                                <span class="detail-label">Next Appointment:</span>
+                                <span class="detail-value">Today, 2:00 PM</span>
+                            </div>
+                            <button class="btn btn-primary" style="width: 100%; margin-top: 10px;">View Profile</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Diet Chart Generator Module -->
+                <div class="module" id="diet-chart">
+                    <div class="module-header">
+                        <h2>Diet Chart Generator</h2>
+                        <button class="btn btn-primary">Generate New Diet</button>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Patient Information</h3>
+                        <div class="form-group">
+                            <label>Select Patient</label>
+                            <select>
+                                <option>Select a patient</option>
+                                <option>Rajesh Kumar</option>
+                                <option>Neha Gupta</option>
+                                <option>Amit Patel</option>
+                                <option>Sanjay Mehta</option>
+                                <option>Priya Singh</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Dietary Preferences & Restrictions</h3>
+                        <div class="form-group">
+                            <label>Food Preferences</label>
+                            <select multiple style="height: 100px;">
+                                <option>Vegetarian</option>
+                                <option>Vegan</option>
+                                <option>Lacto-vegetarian</option>
+                                <option>Ovo-vegetarian</option>
+                                <option>Non-vegetarian</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Allergies & Restrictions</label>
+                            <select multiple style="height: 100px;">
+                                <option>Gluten</option>
+                                <option>Dairy</option>
+                                <option>Nuts</option>
+                                <option>Soy</option>
+                                <option>Eggs</option>
+                                <option>Fish</option>
+                                <option>Spicy food</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Generate Diet Plan</h3>
+                        <div class="form-group">
+                            <label>Plan Duration</label>
+                            <select>
+                                <option>7 days</option>
+                                <option>14 days</option>
+                                <option>30 days</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Calorie Target</label>
+                            <input type="number" placeholder="Enter calorie target">
+                        </div>
+                        
+                        <button class="btn btn-primary">Generate Diet Plan</button>
+                    </div>
+                </div>
+                
+                <!-- Additional modules would go here with similar structure -->
+                <div class="module" id="pharmacy">
+                    <div class="module-header">
+                        <h2>Pharmacy Directory</h2>
+                        <button class="btn btn-primary">AI Medicine Match</button>
+                    </div>
+                    <div class="card">
+                        <h3>Find Ayurvedic Medicines</h3>
+                        <p>AI-powered matching of symptoms to appropriate Ayurvedic formulations.</p>
+                    </div>
+                </div>
+                
+                <div class="module" id="recipe-builder">
+                    <div class="module-header">
+                        <h2>Recipe Builder</h2>
+                        <button class="btn btn-primary">Create New Recipe</button>
+                    </div>
+                    <div class="card">
+                        <h3>Ayurvedic Recipe Formulation</h3>
+                        <p>Build recipes with ingredients that balance doshas and promote health.</p>
+                    </div>
+                </div>
+                
+                <div class="module" id="consultation">
+                    <div class="module-header">
+                        <h2>Consultation</h2>
+                        <button class="btn btn-primary">New Consultation</button>
+                    </div>
+                    <div class="card">
+                        <h3>Doctor-Patient Consultation</h3>
+                        <p>Secure messaging and consultation platform with edit access for doctors.</p>
+                    </div>
+                </div>
+                
+                <div class="module" id="health-quiz">
+                    <div class="module-header">
+                        <h2>Health Assessment</h2>
+                        <button class="btn btn-primary">Start Assessment</button>
+                    </div>
+                    <div class="card">
+                        <h3>Comprehensive Health Quiz</h3>
+                        <p>Assessment of food habits, dietary restrictions, and health conditions to generate personalized recommendations.</p>
+                    </div>
+                </div>
+                
+                <div class="module" id="reporting">
+                    <div class="module-header">
+                        <h2>Reporting</h2>
+                        <button class="btn btn-primary">Generate Report</button>
+                    </div>
+                    <div class="card">
+                        <h3>Export PDF Reports</h3>
+                        <p>Create comprehensive reports for patients, including diet plans, recommendations, and progress tracking.</p>
+                    </div>
+                </div>
+                
+                <div class="module" id="admin">
+                    <div class="module-header">
+                        <h2>Admin Panel</h2>
+                        <button class="btn btn-primary">System Settings</button>
+                    </div>
+                    <div class="card">
+                        <h3>Administrative Controls</h3>
+                        <p>Manage users, permissions, and system configuration for hospitals and clinics.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functionality
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Remove active class from all items
+                document.querySelectorAll('.nav-item').forEach(nav => {
+                    nav.classList.remove('active');
+                });
+                
+                // Add active class to clicked item
+                this.classList.add('active');
+                
+                // Hide all modules
+                document.querySelectorAll('.module').forEach(module => {
+                    module.classList.remove('active');
+                });
+                
+                // Show selected module
+                const target = this.getAttribute('data-target');
+                document.getElementById(target).classList.add('active');
+            });
+        });
+        
+        // Sample data for charts
+        const ctx = document.createElement('canvas');
+        ctx.width = 400;
+        ctx.height = 200;
+        
+        // Simulate health quiz option selection
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                this.classList.toggle('selected');
+            });
+        });
+    </script>
+</body>
+</html>
