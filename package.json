@@ -1,0 +1,21 @@
+{
+  "name": "ayur-health-backend-mongo",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "seed": "node seed.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.1",
+    "express": "^4.18.3",
+    "mongoose": "^7.5.1",
+    "morgan": "^1.10.0",
+    "body-parser": "^1.20.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
