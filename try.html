@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayur-Nourish: SIH 2025 Visualizations</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f8f5f0 0%, #e8f4e8 100%);
+            color: #2c3e50;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background: linear-gradient(135deg, #2c7744 0%, #5a3d2b 100%);
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            color: #2c7744;
+            margin: 25px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #a5d6a7;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            color: #5a3d2b;
+            margin: 20px 0 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        
+        .full-width {
+            grid-column: 1 / span 2;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            height: 320px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .stat-box {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        }
+        
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            color: #388e3c;
+        }
+        
+        .icon {
+            font-size: 2.5rem;
+            color: #4caf50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .feature-list {
+            list-style-type: none;
+            margin-top: 15px;
+        }
+        
+        .feature-list li {
+            margin-bottom: 12px;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .feature-list li:before {
+            content: "✓";
+            color: #4caf50;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+        
+        .flow-chart {
+            display: flex;
+            justify-content: space-between;
+            margin: 25px 0;
+            position: relative;
+        }
+        
+        .flow-step {
+            text-align: center;
+            width: 18%;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .flow-step:not(:last-child):after {
+            content: "→";
+            position: absolute;
+            right: -30px;
+            top: 35px;
+            font-size: 28px;
+            color: #81c784;
+            font-weight: bold;
+        }
+        
+        .step-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 28px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .swot-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .swot-item {
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        }
+        
+        .strengths {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-left: 5px solid #4caf50;
+        }
+        
+        .weaknesses {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            border-left: 5px solid #f44336;
+        }
+        
+        .opportunities {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 5px solid #2196f3;
+        }
+        
+        .threats {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left: 5px solid #ff9800;
+        }
+        
+        .swot-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .tech-stack {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 20px 0;
+        }
+        
+        .tech-item {
+            text-align: center;
+        }
+        
+        .tech-icon {
+            font-size: 3rem;
+            color: #2c7744;
+            margin-bottom: 10px;
+        }
+        
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .impact-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        }
+        
+        .impact-icon {
+            font-size: 2.5rem;
+            color: #4caf50;
+            margin-bottom: 15px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 25px;
+            color: #666;
+            font-size: 0.9rem;
+            background: #f5f5f5;
+            border-radius: 10px;
+        }
+        
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .full-width {
+                grid-column: 1;
+            }
+            
+            .stats-grid, .swot-grid, .impact-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .flow-step:not(:last-child):after {
+                display: none;
+            }
+            
+            .flow-chart {
+                flex-direction: column;
+                align-items: center;
+                gap: 30px;
+            }
+            
+            .flow-step {
+                width: 100%;
+            }
+            
+            .tech-stack {
+                flex-direction: column;
+                gap: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Ayur-Nourish: SIH 2025</h1>
+        <p class="subtitle">Bridging Ancient Wisdom with Modern Nutrition</p>
+        <p>Comprehensive Cloud-Based Practice Management & Nutrient Analysis Software for Ayurvedic Dietitians</p>
+    </header>
+
+    <div class="container">
+        <div class="card full-width">
+            <h2>The Problem: The Digital Void in Ayurvedic Dietetics</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-number">90%</div>
+                    <div class="stat-label">Manual Effort in Diet Planning</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">70%</div>
+                    <div class="stat-label">Practitioners Using Paper-Based Systems</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">65%</div>
+                    <div class="stat-label">Knowledge Gap Between Modern & Ayurvedic Nutrition</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">80%</div>
+                    <div class="stat-label">Lack of Standardization in Patient Plans</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card full-width">
+            <h2>Our Proposed Solution: A Unified SaaS Platform</h2>
+            <div class="flow-chart">
+                <div class="flow-step">
+                    <div class="step-icon"><i class="fas fa-user"></i></div>
+                    <h3>Patient Management</h3>
+                    <p>Digital records & Ayurvedic profiles</p>
+                </div>
+                <div class="flow-step">
+                    <div class="step-icon"><i class="fas fa-brain"></i></div>
+                    <h3>Intelligent Analysis</h3>
+                    <p>Nutrient to Ayurvedic property mapping</p>
+                </div>
+                <div class="flow-step">
+                    <div class="step-icon"><i class="fas fa-utensils"></i></div>
+                    <h3>Recipe Builder</h3>
+                    <p>Create & save custom recipes</p>
+                </div>
+                <div class="flow-step">
+                    <div class="step-icon"><i class="fas fa-chart-pie"></i></div>
+                    <h3>Diet Planning</h3>
+                    <p>Holistic, recipe-based plans</p>
+                </div>
+                <div class="flow-step">
+                    <div class="step-icon"><i class="fas fa-file-pdf"></i></div>
+                    <h3>Export & Share</h3>
+                    <p>Professional PDF reports</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="icon">
+                <i class="fas fa-database"></i>
+            </div>
+            <h2>Data Integration</h2>
+            <div class="chart-container">
+                <canvas id="dataSourcesChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="icon">
+                <i class="fas fa-cogs"></i>
+            </div>
+            <h2>Technical Architecture</h2>
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <i class="fab fa-react tech-icon"></i>
+                    <p>React.js</p>
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-node-js tech-icon"></i>
+                    <p>Node.js</p>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-database tech-icon"></i>
+                    <p>MongoDB</p>
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-aws tech-icon"></i>
+                    <p>AWS</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card full-width">
+            <h2>Implementation Workflow</h2>
+            <div class="chart-container">
+                <canvas id="workflowChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card full-width">
+            <h2>Feasibility Analysis: SWOT</h2>
+            <div class="swot-grid">
+                <div class="swot-item strengths">
+                    <div class="swot-title">Strengths</div>
+                    <ul class="feature-list">
+                        <li>First-mover in B2B Ayurvedic niche</li>
+                        <li>Scalable SaaS model</li>
+                        <li>Strong IP potential in mapping algorithm</li>
+                    </ul>
+                </div>
+                <div class="swot-item weaknesses">
+                    <div class="swot-title">Weaknesses</div>
+                    <ul class="feature-list">
+                        <li>Initial dependency on manually curated database</li>
+                        <li>Requires validation by Ayurvedic experts</li>
+                    </ul>
+                </div>
+                <div class="swot-item opportunities">
+                    <div class="swot-title">Opportunities</div>
+                    <ul class="feature-list">
+                        <li>Growing global demand for wellness tech</li>
+                        <li>Potential for B2C mobile app</li>
+                        <li>Integration with diagnostic labs</li>
+                    </ul>
+                </div>
+                <div class="swot-item threats">
+                    <div class="swot-title">Threats</div>
+                    <ul class="feature-list">
+                        <li>Slow adoption by traditional practitioners</li>
+                        <li>Competition from generic diet apps</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Market Potential</h2>
+            <div class="chart-container">
+                <canvas id="marketChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>User Adoption Forecast</h2>
+            <div class="chart-container">
+                <canvas id="adoptionChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card full-width">
+            <h2>Impact and Benefits</h2>
+            <div class="impact-grid">
+                <div class="impact-item">
+                    <i class="fas fa-clock impact-icon"></i>
+                    <h3>Time Savings</h3>
+                    <p class="stat-number">80%</p>
+                    <p>Reduction in administrative tasks</p>
+                </div>
+                <div class="impact-item">
+                    <i class="fas fa-users impact-icon"></i>
+                    <h3>Capacity Increase</h3>
+                    <p class="stat-number">50%</p>
+                    <p>More patients managed</p>
+                </div>
+                <div class="impact-item">
+                    <i class="fas fa-rupee-sign impact-icon"></i>
+                    <h3>Revenue Growth</h3>
+                    <p class="stat-number">70%</p>
+                    <p>Higher revenue potential</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card full-width">
+            <h2>Social & Economic Benefits</h2>
+            <div class="chart-container">
+                <canvas id="benefitsChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card full-width">
+            <h2>Technology Integration</h2>
+            <div class="chart-container">
+                <canvas id="techChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Smart India Hackathon 2025 | Ayur-Nourish: Bridging Ancient Wisdom with Modern Nutrition</p>
+        <p>References: USDA FoodData Central, National Institute of Nutrition (NIN), AYUSH, FICCI & EY Wellness Market Report</p>
+    </footer>
+
+    <script>
+        // Data Sources Chart
+        const dataCtx = document.getElementById('dataSourcesChart').getContext('2d');
+        new Chart(dataCtx, {
+            type: 'pie',
+            data: {
+                labels: ['USDA Database', 'NIN Indian Food Data', 'Ayurvedic Texts', 'Expert Validation'],
+                datasets: [{
+                    data: [30, 40, 20, 10],
+                    backgroundColor: ['#4caf50', '#8bc34a', '#cddc39', '#ffeb3b']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Data Sources Integration'
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // Workflow Chart
+        const workflowCtx = document.getElementById('workflowChart').getContext('2d');
+        new Chart(workflowCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Patient Onboarding', 'System Analysis', 'Plan Generation', 'Review & Export'],
+                datasets: [{
+                    label: 'Time Saved (minutes)',
+                    data: [15, 25, 35, 10],
+                    backgroundColor: ['#4caf50', '#8bc34a', '#cddc39', '#ffeb3b']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Time Savings in Workflow Steps'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Time Saved (minutes)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Market Chart
+        const marketCtx = document.getElementById('marketChart').getContext('2d');
+        new Chart(marketCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Ayurvedic Practitioners', 'Wellness Centers', 'Hospitals', 'Individual Users'],
+                datasets: [{
+                    data: [45, 25, 15, 15],
+                    backgroundColor: ['#4caf50', '#8bc34a', '#cddc39', '#ffeb3b']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Target Market Segmentation'
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // Adoption Chart
+        const adoptionCtx = document.getElementById('adoptionChart').getContext('2d');
+        new Chart(adoptionCtx, {
+            type: 'line',
+            data: {
+                labels: ['Year 1', 'Year 2', 'Year 3', 'Year 4', 'Year 5'],
+                datasets: [{
+                    label: 'Practitioners',
+                    data: [500, 1500, 3500, 7000, 12000],
+                    borderColor: '#4caf50',
+                    tension: 0.3,
+                    fill: true,
+                    backgroundColor: 'rgba(76, 175, 80, 0.1)'
+                }, {
+                    label: 'Patients',
+                    data: [10000, 40000, 100000, 250000, 500000],
+                    borderColor: '#ff9800',
+                    tension: 0.3,
+                    fill: true,
+                    backgroundColor: 'rgba(255, 152, 0, 0.1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '5-Year User Adoption Forecast'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of Users'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Benefits Chart
+        const benefitsCtx = document.getElementById('benefitsChart').getContext('2d');
+        new Chart(benefitsCtx, {
+            type: 'polarArea',
+            data: {
+                labels: ['Healthcare Access', 'Economic Growth', 'Knowledge Preservation', 'Preventative Care', 'Standardization'],
+                datasets: [{
+                    data: [30, 25, 20, 15, 10],
+                    backgroundColor: ['#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ff9800']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Social Benefits Distribution'
+                    }
+                }
+            }
+        });
+
+        // Tech Chart
+        const techCtx = document.getElementById('techChart').getContext('2d');
+        new Chart(techCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Frontend', 'Backend', 'Database', 'Cloud', 'Security', 'API Integration'],
+                datasets: [{
+                    label: 'Technical Implementation',
+                    data: [90, 85, 80, 75, 95, 85],
+                    fill: true,
+                    backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                    borderColor: '#4caf50',
+                    pointBackgroundColor: '#4caf50',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#4caf50'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Technology Implementation Readiness'
+                    }
+                },
+                scales: {
+                    r: {
+                        angleLines: {
+                            display: true
+                        },
+                        suggestedMin: 0,
+                        suggestedMax: 100
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

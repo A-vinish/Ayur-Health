@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feasibility & Viability - AyurDiet Suite</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f5f0;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0;
+            background: linear-gradient(135deg, #2c7744 0%, #5a3d2b 100%);
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 1.6rem;
+            color: #2c7744;
+            margin: 20px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #a5d6a7;
+        }
+        
+        h3 {
+            font-size: 1.3rem;
+            color: #5a3d2b;
+            margin: 15px 0 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        }
+        
+        .full-width {
+            grid-column: 1 / span 2;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            height: 300px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .stat-box {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+        }
+        
+        .icon {
+            font-size: 2.2rem;
+            color: #4caf50;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        
+        .feature-list {
+            list-style-type: none;
+            margin-top: 15px;
+        }
+        
+        .feature-list li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .feature-list li:before {
+            content: "•";
+            color: #4caf50;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .risk-matrix {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .risk-item {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ff9800;
+        }
+        
+        .risk-title {
+            font-weight: bold;
+            color: #5a3d2b;
+            margin-bottom: 8px;
+        }
+        
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .timeline-phase {
+            text-align: center;
+            width: 23%;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .timeline-phase:not(:last-child):after {
+            content: "→";
+            position: absolute;
+            right: -30px;
+            top: 30px;
+            font-size: 24px;
+            color: #81c784;
+        }
+        
+        .phase-icon {
+            width: 60px;
+            height: 60px;
+            background: #4caf50;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 24px;
+        }
+        
+        .market-analysis {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .market-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            width: 30%;
+        }
+        
+        .market-item .number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .full-width {
+                grid-column: 1;
+            }
+            
+            .stats-grid, .risk-matrix {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline-phase:not(:last-child):after {
+                display: none;
+            }
+            
+            .timeline {
+                flex-direction: column;
+                align-items: center;
+                gap: 25px;
+            }
+            
+            .timeline-phase {
+                width: 100%;
+            }
+            
+            .market-analysis {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            
+            .market-item {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Feasibility & Viability - AyurDiet Suite</h1>
+        <p class="subtitle">Comprehensive Cloud-Based Ayurvedic Practice Management</p>
+    </header>
+
+    <div class="container">
+        <div class="card full-width">
+            <h2>Market Analysis</h2>
+            <div class="market-analysis">
+                <div class="market-item">
+                    <div class="number">$14.33B</div>
+                    <div>India Digital Health Market (2024)</div>
+                </div>
+                <div class="market-item">
+                    <div class="number">74.2M</div>
+                    <div>Indians with Diabetes</div>
+                </div>
+                <div class="market-item">
+                    <div class="number">20.8%</div>
+                    <div>Digital Health CAGR (2024-2030)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Technical Feasibility</h2>
+            <ul class="feature-list">
+                <li>Existing tech stack requires no R&D</li>
+                <li>Open-source frameworks available</li>
+                <li>Cloud infrastructure scalable</li>
+                <li>API integrations well-documented</li>
+                <li>Mobile development proven</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <div class="icon">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+            <h2>Financial Viability</h2>
+            <ul class="feature-list">
+                <li>Low initial investment required</li>
+                <li>Recurring revenue model (SaaS)</li>
+                <li>Clear monetization strategy</li>
+                <li>High gross margins (75-80%)</li>
+                <li>Quick break-even projected</li>
+            </ul>
+        </div>
+
+        <div class="card full-width">
+            <h2>Implementation Timeline</h2>
+            <div class="timeline">
+                <div class="timeline-phase">
+                    <div class="phase-icon">1</div>
+                    <h3>MVP Development</h3>
+                    <p>3-4 months</p>
+                </div>
+                <div class="timeline-phase">
+                    <div class="phase-icon">2</div>
+                    <h3>Pilot Testing</h3>
+                    <p>2 months</p>
+                </div>
+                <div class="timeline-phase">
+                    <div class="phase-icon">3</div>
+                    <h3>Full Launch</h3>
+                    <p>1 month</p>
+                </div>
+                <div class="timeline-phase">
+                    <div class="phase-icon">4</div>
+                    <h3>Scale Up</h3>
+                    <p>Ongoing</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>ROI Projection</h2>
+            <div class="chart-container">
+                <canvas id="roiChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Market Penetration</h2>
+            <div class="chart-container">
+                <canvas id="marketChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card full-width">
+            <h2>Risk Analysis & Mitigation</h2>
+            <div class="risk-matrix">
+                <div class="risk-item">
+                    <div class="risk-title">Technical Risks</div>
+                    <p>Data security concerns</p>
+                    <p><strong>Mitigation:</strong> Advanced encryption & compliance</p>
+                </div>
+                <div class="risk-item">
+                    <div class="risk-title">Market Risks</div>
+                    <p>Low digital adoption among practitioners</p>
+                    <p><strong>Mitigation:</strong> Training programs & intuitive UI</p>
+                </div>
+                <div class="risk-item">
+                    <div class="risk-title">Operational Risks</div>
+                    <p>Recipe data accuracy</p>
+                    <p><strong>Mitigation:</strong> Hybrid AI + expert validation</p>
+                </div>
+                <div class="risk-item">
+                    <div class="risk-title">Financial Risks</div>
+                    <p>Initial cash flow challenges</p>
+                    <p><strong>Mitigation:</strong> Phased implementation</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card full-width">
+            <h2>Resource Requirements</h2>
+            <div class="chart-container">
+                <canvas id="resourceChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Success Metrics</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-number">50%</div>
+                    <div class="stat-label">Time Reduction in Diet Planning</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">40%</div>
+                    <div class="stat-label">Increase in Patient Adherence</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">6-9</div>
+                    <div class="stat-label">Month Break-even Period</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">5x</div>
+                    <div class="stat-label">ROI in First Year</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Go-to-Market Strategy</h2>
+            <ul class="feature-list">
+                <li>Pilot with 10 Ayurvedic clinics</li>
+                <li>Partnership with Ayurvedic associations</li>
+                <li>Freemium model for individual practitioners</li>
+                <li>Tiered pricing for clinics & institutions</li>
+                <li>Digital marketing to reach practitioners</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>Smart India Hackathon 2025 | AyurDiet Suite - Feasibility & Viability Analysis</p>
+        <p>References: IDF Diabetes Atlas 2024, Grand View Research, India Digital Health Outlook 2024</p>
+    </footer>
+
+    <script>
+        // ROI Projection Chart
+        const roiCtx = document.getElementById('roiChart').getContext('2d');
+        new Chart(roiCtx, {
+            type: 'line',
+            data: {
+                labels: ['Month 1', 'Month 3', 'Month 6', 'Month 9', 'Month 12'],
+                datasets: [{
+                    label: 'Investment',
+                    data: [10000, 15000, 18000, 20000, 22000],
+                    borderColor: '#ff5722',
+                    tension: 0.2,
+                    fill: true,
+                    backgroundColor: 'rgba(255, 87, 34, 0.1)'
+                },
+                {
+                    label: 'Revenue',
+                    data: [2000, 6000, 15000, 30000, 55000],
+                    borderColor: '#4caf50',
+                    tension: 0.2,
+                    fill: true,
+                    backgroundColor: 'rgba(76, 175, 80, 0.1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'ROI Projection (First Year)'
+                    }
+                }
+            }
+        });
+
+        // Market Penetration Chart
+        const marketCtx = document.getElementById('marketChart').getContext('2d');
+        new Chart(marketCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Early Adopters', 'Mainstream Market', 'Late Adopters'],
+                datasets: [{
+                    data: [15, 60, 25],
+                    backgroundColor: ['#4caf50', '#8bc34a', '#cddc39']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Market Penetration Strategy'
+                    }
+                }
+            }
+        });
+
+        // Resource Allocation Chart
+        const resourceCtx = document.getElementById('resourceChart').getContext('2d');
+        new Chart(resourceCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Development', 'Marketing', 'Operations', 'Support', 'R&D'],
+                datasets: [{
+                    label: 'Resource Allocation (%)',
+                    data: [40, 25, 15, 12, 8],
+                    backgroundColor: ['#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ff9800']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'First-Year Resource Allocation'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 50,
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

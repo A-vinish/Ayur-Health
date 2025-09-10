@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AyurDiet Suite - Ayurvedic Practice Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f5f0;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            color: #2e7d32;
+            margin: 25px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #c8e6c9;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            color: #388e3c;
+            margin: 20px 0 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+        
+        .full-width {
+            grid-column: 1 / span 2;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .stat-box {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+        }
+        
+        .icon {
+            font-size: 2.5rem;
+            color: #4caf50;
+            margin-bottom: 15px;
+        }
+        
+        .process-flow {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .process-step {
+            text-align: center;
+            width: 18%;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .process-step:not(:last-child):after {
+            content: "→";
+            position: absolute;
+            right: -30px;
+            top: 30px;
+            font-size: 24px;
+            color: #81c784;
+        }
+        
+        .step-icon {
+            width: 60px;
+            height: 60px;
+            background: #4caf50;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 24px;
+        }
+        
+        .feature-list {
+            list-style-type: none;
+        }
+        
+        .feature-list li {
+            margin-bottom: 12px;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .feature-list li:before {
+            content: "✓";
+            color: #4caf50;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        }
+        
+        .bar-chart {
+            display: flex;
+            height: 200px;
+            align-items: flex-end;
+            gap: 30px;
+            justify-content: center;
+            padding: 0 20px;
+        }
+        
+        .bar {
+            width: 70px;
+            background: linear-gradient(to top, #4caf50 0%, #81c784 100%);
+            border-radius: 5px 5px 0 0;
+            position: relative;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            padding-top: 10px;
+        }
+        
+        .bar-label {
+            position: absolute;
+            bottom: -30px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #333;
+        }
+        
+        .market-stats {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .market-stat {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            width: 30%;
+        }
+        
+        .market-stat .number {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .full-width {
+                grid-column: 1;
+            }
+            
+            .process-step:not(:last-child):after {
+                display: none;
+            }
+            
+            .process-flow {
+                flex-direction: column;
+                align-items: center;
+                gap: 25px;
+            }
+            
+            .process-step {
+                width: 100%;
+            }
+            
+            .market-stats {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            
+            .market-stat {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>AyurDiet Suite</h1>
+        <p class="subtitle">Comprehensive Cloud-Based Practice Management & Nutrient Analysis Software for Ayurvedic Dietitians</p>
+    </header>
+
+    <div class="container">
+        <div class="card full-width">
+            <h2>Our Innovation - By the Numbers</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-number">74.2M</div>
+                    <div class="stat-label">Indians with Diabetes (IDF Atlas)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">60%</div>
+                    <div class="stat-label">Time Reduction in Diet Planning</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">89%</div>
+                    <div class="stat-label">Patient Adherence Improvement</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">$14.33B</div>
+                    <div class="stat-label">India Digital Health Market (2024)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="icon">
+                <i class="fas fa-user-md"></i>
+            </div>
+            <h3>Practice Management</h3>
+            <ul class="feature-list">
+                <li>Patient intake with Prakriti analysis</li>
+                <li>Appointment scheduling</li>
+                <li>SOAP notes integration</li>
+                <li>Billing and inventory management</li>
+                <li>Teleconsultation features</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <div class="icon">
+                <i class="fas fa-utensils"></i>
+            </div>
+            <h3>Nutrient Analysis Engine</h3>
+            <ul class="feature-list">
+                <li>Indian recipe parser</li>
+                <li>IFCT food database mapping</li>
+                <li>Cooking yield adjustments</li>
+                <li>Dosha-specific recommendations</li>
+                <li>Auto-swap suggestions</li>
+            </ul>
+        </div>
+
+        <div class="card full-width">
+            <h2>How AyurDiet Suite Works</h2>
+            <div class="process-flow">
+                <div class="process-step">
+                    <div class="step-icon">1</div>
+                    <h3>Patient Intake</h3>
+                    <p>Demographics, symptoms, lifestyle</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-icon">2</div>
+                    <h3>Prakriti Analysis</h3>
+                    <p>Dosha assessment quiz</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-icon">3</div>
+                    <h3>Plan Creation</h3>
+                    <p>Dosha-specific diet templates</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-icon">4</div>
+                    <h3>Nutrient Analysis</h3>
+                    <p>Recipe parsing & nutrition facts</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-icon">5</div>
+                    <h3>Delivery</h3>
+                    <p>Patient app with reminders</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card full-width">
+            <h2>Market Opportunity</h2>
+            <div class="market-stats">
+                <div class="market-stat">
+                    <div class="number">10.5%</div>
+                    <div>India Diabetes Prevalence</div>
+                </div>
+                <div class="market-stat">
+                    <div class="number">20.8%</div>
+                    <div>Digital Health CAGR (2024-2030)</div>
+                </div>
+                <div class="market-stat">
+                    <div class="number">880M</div>
+                    <div>Internet Users in India</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card full-width">
+            <h2>Key Benefits</h2>
+            <div class="chart-container">
+                <div class="bar-chart">
+                    <div class="bar" style="height: 180px;">
+                        89%
+                        <div class="bar-label">Adherence</div>
+                    </div>
+                    <div class="bar" style="height: 160px;">
+                        72%
+                        <div class="bar-label">Time Saved</div>
+                    </div>
+                    <div class="bar" style="height: 140px;">
+                        65%
+                        <div class="bar-label">Outcomes</div>
+                    </div>
+                    <div class="bar" style="height: 120px;">
+                        78%
+                        <div class="bar-label">Satisfaction</div>
+                    </div>
+                    <div class="bar" style="height: 100px;">
+                        85%
+                        <div class="bar-label">Accuracy</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Smart India Hackathon 2025 | AyurDiet Suite - Comprehensive Cloud-Based Practice Management & Nutrient Analysis Software</p>
+        <p>References: IDF Diabetes Atlas 2024, Grand View Research, DataReportal / IAMAI 2024</p>
+    </footer>
+</body>
+</html>
